@@ -1,17 +1,12 @@
 // headers for Linux compability
 #ifdef __linux__
 
-#include <sys/socket.h> 
-#include <sys/types.h> 
+#include "linxnetw.h"
 
 // headers for Windows compability
 #elif _WIN32
-// Will be soon
 
-#include <sys/types.h> 
-#include <sys/socket.h>
-
-#error "Not Supported Yet"  
+#include "winnetw.h"
 
 #else
 #error "Run on not supported OS"
