@@ -14,6 +14,9 @@ int main(int argc, char ** argv){
         printf("WinSock init succeed\n");
     }
 
+    SOCKET servSock = makeServerSocket();
+
+    servSock = bindServerSocket(servSock, PORT);
 
     WSACleanup();
     printf("WinSock closed\n");
