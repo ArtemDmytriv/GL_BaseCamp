@@ -1,4 +1,5 @@
 #include "head.h"
 
+SOCKET makeSocket(unsigned short Port);
 
-SOCKET makeSocket(unsigned short PORT);
+void genMouseInfo();

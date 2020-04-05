@@ -1,7 +1,5 @@
 #include "head.h"
 
-#define PORT 5002
-
 int main(int argc, char ** argv){
     
     // Init WinApi 
@@ -16,8 +14,6 @@ int main(int argc, char ** argv){
         printf("WinSock init succeed\n");
     }
 
-    POINT * lp;
-    GetCursorPos(lp);
 
     WSACleanup();
     printf("WinSock closed\n");

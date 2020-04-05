@@ -1,6 +1,9 @@
 #ifndef _MAIN_HEAD
 #define _MAIN_HEAD
 
+#define MAXCON 10
+#define PORT 5002
+
 #ifdef __linux__
 // headers for Linux compability
 #include "linxnetw.h"
