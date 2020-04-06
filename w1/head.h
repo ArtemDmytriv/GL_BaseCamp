@@ -22,5 +22,6 @@
 // cross-platform headers
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 
 #endif
