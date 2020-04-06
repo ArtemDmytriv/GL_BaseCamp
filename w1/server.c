@@ -16,7 +16,13 @@ int main(int argc, char ** argv){
 
     SOCKET servSock = makeServerSocket();
 
-    servSock = bindServerSocket(servSock, PORT);
+    servSock = bindServerSocket(servSock);
+
+    SOCKET clienSock = createConnectionServer(servSock);
+
+    clienSock = proccesServer(clienSock);
+
+    closeConnectionServer(clienSock);
 
     WSACleanup();
     printf("WinSock closed\n");
