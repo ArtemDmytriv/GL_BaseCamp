@@ -34,9 +34,9 @@ SOCKET bindServerSocket(SOCKET ListenSock, unsigned short Port){
     return ListenSock;
 }
 
-SOCKET createСonnectionServer(SOCKET ListenSock){
+SOCKET createConnectionServer(SOCKET ListenSock){
 
-    SOCKET ClientSock = NULL;
+    SOCKET ClientSock = INVALID_SOCKET;
     ClientSock = accept(ListenSock, NULL, NULL);
 
     if (ClientSock == INVALID_SOCKET){
@@ -51,6 +51,25 @@ SOCKET createСonnectionServer(SOCKET ListenSock){
     return ClientSock;
 }
 
+SOCKET proccesServer(SOCKET ClientSock){
+
+    char buffer[BUFFLEN];
+    int bufflen = BUFFLEN;
+
+    int res = recv(ClientSock, buffer, bufflen, 0);
+    while (res > 0){
+        printf("Bytes recieved %d B", res);
+
+        //
+
+        printf("Bytes send %d B",  send(ClientSock, buffer, res, 0));
+    }
+    
+    printf ("Connection clossed");
+
+    return ClientSock;
+}
+
 int closeConnectionServer(SOCKET ClientSock){
     
     if (shutdown(ClientSock, SD_SEND) == SOCKET_ERROR){
@@ -60,7 +79,7 @@ int closeConnectionServer(SOCKET ClientSock){
 
         return 1;
     }  
-    
+
     return 0;
 }
 

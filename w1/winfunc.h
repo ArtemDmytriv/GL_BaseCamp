@@ -4,9 +4,11 @@ SOCKET makeServerSocket();
 
 SOCKET bindServerSocket(SOCKET ListenSock, unsigned short Port);
 
-SOCKET createСonnectionServer();
+SOCKET createConnectionServer(SOCKET ListenSock);
 
 int closeConnectionServer(SOCKET ClientSock);
+
+SOCKET proccesServer(SOCKET ClientSock);
 
 int cleanupServer(SOCKET ClientSock);
 

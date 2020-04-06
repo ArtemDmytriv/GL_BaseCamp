@@ -2,6 +2,7 @@
 #define _MAIN_HEAD
 
 #define MAXCON 10
+#define BUFFLEN 1024
 #define PORT 5002
 
 #ifdef __linux__
