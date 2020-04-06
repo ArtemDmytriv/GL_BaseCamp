@@ -33,3 +33,41 @@ SOCKET bindServerSocket(SOCKET ListenSock, unsigned short Port){
 
     return ListenSock;
 }
+
+SOCKET createСonnectionServer(SOCKET ListenSock){
+
+    SOCKET ClientSock = NULL;
+    ClientSock = accept(ListenSock, NULL, NULL);
+
+    if (ClientSock == INVALID_SOCKET){
+        printf("Accept failed\n");
+        closesocket(ListenSock);
+        WSACleanup();
+        return 1;
+    }
+
+    closesocket(ListenSock);
+
+    return ClientSock;
+}
+
+int closeConnectionServer(SOCKET ClientSock){
+    
+    if (shutdown(ClientSock, SD_SEND) == SOCKET_ERROR){
+        printf("Shutdown failed\n");
+        closesocket(ClientSock);
+        WSACleanup();
+
+        return 1;
+    }  
+    
+    return 0;
+}
+
+int cleanupServer(SOCKET ClientSock){
+
+    closesocket(ClientSock);
+    WSACleanup();
+    
+    return 0;
+}
