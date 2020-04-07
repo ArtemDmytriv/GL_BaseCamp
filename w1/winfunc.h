@@ -1,6 +1,8 @@
 #include "head.h"
 
 // Server funcs
+int WSAinit();
+
 SOCKET makeServerSocket();
 
 SOCKET bindServerSocket(SOCKET ListenSock);
@@ -16,5 +18,14 @@ int cleanupServer(SOCKET ClientSock);
 
 
 // Client funcs
+
+SOCKET processClientSocket(const char * addr, short port);
+
+int cleanupClient(SOCKET ClientSock);
+
 void getMouseInfo(char * buf);
+
+void WINAPI getCursorPositionThread(LPPOINT coor);
+
+void WINAPI getMouseClickThread(int* kL, int * kR);
 

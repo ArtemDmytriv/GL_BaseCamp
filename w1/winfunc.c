@@ -1,5 +1,19 @@
 #include "winfunc.h"
 
+// Server
+
+int WSAinit(){
+    WSADATA wsaData;
+    printf("Initialising WinSock...\n");
+    if (WSAStartup(WINSOCK_VERSION, &wsaData)){
+        printf("WinSock init failed!\n ");
+        exit(1);
+    }
+    else{
+        printf("WinSock init succeed\n");
+    }
+}
+
 SOCKET makeServerSocket(){
 
     SOCKET ListenSock = INVALID_SOCKET;
@@ -97,10 +111,76 @@ int cleanupServer(SOCKET ClientSock){
     return 0;
 }
 
+// Client
+
+SOCKET processClientSocket(const char * chaddr, short port){
+
+    SOCKET sock = socket( AF_INET, SOCK_STREAM, IPPROTO_TCP);
+    SOCKADDR_IN addr;
+
+    addr.sin_family = AF_INET;
+    addr.sin_port = htons(port);
+    addr.sin_addr.s_addr = inet_addr(chaddr);
+
+    if (connect (sock, (SOCKADDR *)&addr, sizeof(addr)) != SOCKET_ERROR){
+        char buff[BUFFLEN];
+
+        for (int i = 0; i < 1000; ++i){
+            // test func
+
+            getMouseInfo(buff);
+
+            send(sock, buff, strlen(buff), 0);
+        
+            //printf("Send : %s", buff);
+
+        }
+    }
+    
+    return sock;
+}
+
+int cleanupClient(SOCKET ClientSock){
+    printf("Cleanup\n");
+    closesocket(ClientSock);
+    WSACleanup();
+    
+    return 0;
+}
+
 void getMouseInfo(char * buf){
 
-    POINT coor;
-    GetCursorPos(&coor);
-    sprintf(buf, "%d %d\n", coor.x, coor.y);
+    memset(buf, 0, BUFFLEN);
 
+    POINT coor;
+    int Rclicks = 0, Lclicks = 0;
+
+    HANDLE thread1 = CreateThread(NULL, 0, getMouseClickThread, NULL, 0, NULL);
+    HANDLE thread2 = CreateThread(NULL, 0, getCursorPositionThread, NULL, 0, NULL);
+
+
+    sprintf(buf, "%d %d : %d %d", coor.x, coor.y, Lclicks, Rclicks);
+}
+
+void WINAPI getCursorPositionThread(LPPOINT coor){
+    GetCursorPos(coor);
+    Sleep(500);
+}
+
+void WINAPI getMouseClickThread(int* kL, int * kR)
+{
+   //Check the mouse left button is pressed or not
+   while (1){
+    if ((GetKeyState(VK_LBUTTON) & 0x80) != 0)
+    {
+        *kL += 1;
+        printf("LButton pressed\n");
+    }
+    //Check the mouse right button is pressed or not
+    if ((GetKeyState(VK_RBUTTON) & 0x80) != 0)
+    {
+        *kR += 1;
+        printf("RButton pressed\n");
+    }
+   }
 }

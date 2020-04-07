@@ -3,16 +3,7 @@
 int main(int argc, char ** argv){
     
     // Init WinApi 
-    WSADATA wsaData;
-    
-    printf("Initialising WinSock...\n");
-    if (WSAStartup(WINSOCK_VERSION, &wsaData)){
-        printf("WinSock init failed!\n ");
-        exit(1);
-    }
-    else{
-        printf("WinSock init succeed\n");
-    }
+    WSAinit();
 
     SOCKET servSock = makeServerSocket();
 
@@ -24,8 +15,7 @@ int main(int argc, char ** argv){
 
     closeConnectionServer(clienSock);
 
-    WSACleanup();
-    printf("WinSock closed\n");
+    cleanupServer(clienSock);
     
     return 0;
 }
