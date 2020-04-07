@@ -13,6 +13,7 @@
 #elif _WIN32
 // headers for Windows compability
 #include "winnetw.h"
+#include "process.h"
 #include "winfunc.h"
 
 #else

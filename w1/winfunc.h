@@ -25,5 +25,6 @@ int cleanupClient(SOCKET ClientSock);
 
 void getMouseInfo(char * buf);
 
-// void WINAPI getMouseClickThread(int* kL, int * kR);
+unsigned __stdcall getMousePosThread(void * params);
+unsigned __stdcall getMouseClickThread(void * params);
 

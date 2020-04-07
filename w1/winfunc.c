@@ -76,8 +76,9 @@ SOCKET proccesServer(SOCKET ClientSock){
     int res = recv(ClientSock, buffer, bufflen, 0);
     
     while (res > 0){
-        printf("Bytes recieved %d B\n", res);
+        printf("--------------------------------\nBytes recieved: %d B\n", res);
         printf("Recieved info: %s\n", buffer);
+        memset(buffer, 0, BUFFLEN);
         //
 
         res = recv(ClientSock, buffer, bufflen, 0);
@@ -129,7 +130,6 @@ SOCKET processClientSocket(const char * chaddr, short port){
             // test func
 
             getMouseInfo(buff);
-
             send(sock, buff, strlen(buff), 0);
         
             //printf("Send : %s", buff);
@@ -148,36 +148,73 @@ int cleanupClient(SOCKET ClientSock){
     return 0;
 }
 
+
+static HANDLE event;
+
 void getMouseInfo(char * buf){
 
     memset(buf, 0, BUFFLEN);
 
-    POINT coor;
-    int Rclicks = 0, Lclicks = 0;
+    printf("LOG: Start getMouseInfo\n");
 
-    GetCursorPos(&coor);
+    typedef struct cl{
+        char right;
+        char left;
+    } cl;
+    
+    HANDLE t1, t2;
+
+    POINT coor;
+    cl clicks = {0, 0};
+
+    event = CreateEvent(NULL, TRUE, FALSE, NULL);
+
+    t1 = (HANDLE)_beginthreadex(NULL, 0, getMousePosThread, (void*)&coor, 0, NULL);    
+    t2 = (HANDLE)_beginthreadex(NULL, 0, getMouseClickThread, (void*)&clicks, 0, NULL);
+
     Sleep(500);
 
-    //beginthreadex();
+    SetEvent(event);
 
-    sprintf(buf, "%d %d : %d %d", coor.x, coor.y, Lclicks, Rclicks);
+    sprintf(buf, "%d %d %s %s", coor.x, coor.y, (clicks.left?"LKM":" "), (clicks.left?"RKM":" "));
+
+    CloseHandle(event);
+    CloseHandle(t1);
+    CloseHandle(t2);
+
+    printf("LOG: End getMouseInfo\n");
+
 }
 
+unsigned __stdcall getMousePosThread(void * params){
+    
+    LPPOINT res = (LPPOINT)params;
+    GetCursorPos(res);
 
-// void WINAPI getMouseClickThread(int* kL, int * kR)
-// {
-//    //Check the mouse left button is pressed or not
-//    while (1){
-//     if ((GetKeyState(VK_LBUTTON) & 0x80) != 0)
-//     {
-//         *kL += 1;
-//         printf("LButton pressed\n");
-//     }
-//     //Check the mouse right button is pressed or not
-//     if ((GetKeyState(VK_RBUTTON) & 0x80) != 0)
-//     {
-//         *kR += 1;
-//         printf("RButton pressed\n");
-//     }
-//    }
-// }
+    printf("POS: %d, %d\n", (*res).x, (*res).y);
+
+    return 0;
+}
+
+unsigned __stdcall getMouseClickThread(void * params){
+    
+    char * wasPressedL = (char*)params;
+    char * wasPressedR = (char*)params + 1;
+
+    while(WaitForSingleObject(event, 0) != WAIT_OBJECT_0){
+        if ((GetKeyState(VK_LBUTTON) & 0x80) != 0 && !*wasPressedL)
+        {
+            (*wasPressedL) = 1;
+            printf("LButton pressed\n");
+        }
+        //Check the mouse right button is pressed or not
+        if ((GetKeyState(VK_RBUTTON) & 0x80) != 0 && !*wasPressedR)
+        {
+            (*wasPressedR) = 1;
+            printf("RButton pressed\n");
+        }
+
+    }
+
+    return 0;
+}
