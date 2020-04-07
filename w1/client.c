@@ -14,6 +14,30 @@ int main(int argc, char ** argv){
         printf("WinSock init succeed\n");
     }
 
+    //
+    SOCKET sock = socket( AF_INET, SOCK_STREAM, IPPROTO_TCP);
+    SOCKADDR_IN addr;
+
+    addr.sin_family = AF_INET;
+    addr.sin_port = htons(PORT);
+    addr.sin_addr.s_addr = inet_addr(chaddr);
+
+    if (connect (sock, (SOCKADDR *)&addr, sizeof(addr)) != SOCKET_ERROR){
+        char buff[BUFFLEN];
+
+        for (int i = 0; i < 1000; ++i){
+            // test func
+
+            getMouseInfo(buff);
+            
+            send(sock, buff, strlen(buff), 0);
+        
+            //printf("Send : %s", buff);
+            Sleep(500);
+        }
+    }
+
+    closesocket(sock);
 
     WSACleanup();
 
