@@ -1,5 +1,6 @@
 #include "head.h"
 
+// Server funcs
 SOCKET makeServerSocket();
 
 SOCKET bindServerSocket(SOCKET ListenSock);
@@ -12,4 +13,8 @@ int closeConnectionServer(SOCKET ClientSock);
 
 int cleanupServer(SOCKET ClientSock);
 
-void genMouseInfo();
+
+
+// Client funcs
+void getMouseInfo(char * buf);
+

@@ -96,3 +96,11 @@ int cleanupServer(SOCKET ClientSock){
     
     return 0;
 }
+
+void getMouseInfo(char * buf){
+
+    POINT coor;
+    GetCursorPos(&coor);
+    sprintf(buf, "%d %d\n", coor.x, coor.y);
+
+}
