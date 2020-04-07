@@ -125,7 +125,7 @@ SOCKET processClientSocket(const char * chaddr, short port){
     if (connect (sock, (SOCKADDR *)&addr, sizeof(addr)) != SOCKET_ERROR){
         char buff[BUFFLEN];
 
-        for (int i = 0; i < 1000; ++i){
+        for (int i = 0; i < 10; ++i){
             // test func
 
             getMouseInfo(buff);
@@ -155,32 +155,29 @@ void getMouseInfo(char * buf){
     POINT coor;
     int Rclicks = 0, Lclicks = 0;
 
-    HANDLE thread1 = CreateThread(NULL, 0, getMouseClickThread, NULL, 0, NULL);
-    HANDLE thread2 = CreateThread(NULL, 0, getCursorPositionThread, NULL, 0, NULL);
+    GetCursorPos(&coor);
+    Sleep(500);
 
+    //beginthreadex();
 
     sprintf(buf, "%d %d : %d %d", coor.x, coor.y, Lclicks, Rclicks);
 }
 
-void WINAPI getCursorPositionThread(LPPOINT coor){
-    GetCursorPos(coor);
-    Sleep(500);
-}
 
-void WINAPI getMouseClickThread(int* kL, int * kR)
-{
-   //Check the mouse left button is pressed or not
-   while (1){
-    if ((GetKeyState(VK_LBUTTON) & 0x80) != 0)
-    {
-        *kL += 1;
-        printf("LButton pressed\n");
-    }
-    //Check the mouse right button is pressed or not
-    if ((GetKeyState(VK_RBUTTON) & 0x80) != 0)
-    {
-        *kR += 1;
-        printf("RButton pressed\n");
-    }
-   }
-}
+// void WINAPI getMouseClickThread(int* kL, int * kR)
+// {
+//    //Check the mouse left button is pressed or not
+//    while (1){
+//     if ((GetKeyState(VK_LBUTTON) & 0x80) != 0)
+//     {
+//         *kL += 1;
+//         printf("LButton pressed\n");
+//     }
+//     //Check the mouse right button is pressed or not
+//     if ((GetKeyState(VK_RBUTTON) & 0x80) != 0)
+//     {
+//         *kR += 1;
+//         printf("RButton pressed\n");
+//     }
+//    }
+// }
