@@ -1,7 +1,7 @@
 #include "winfunc.h"
 typedef struct MouseData{
-    char RKM;
     char LKM;
+    char RKM;
     int x;
     int y;
 } MouseData;
@@ -60,7 +60,10 @@ SOCKET bindServerSocket(SOCKET ListenSock){
 SOCKET createConnectionServer(SOCKET ListenSock){
 
     SOCKET ClientSock = INVALID_SOCKET;
-    ClientSock = accept(ListenSock, NULL, NULL);
+    SOCKADDR_IN clientAddr;
+    int nSize = sizeof(clientAddr);
+
+    ClientSock = accept(ListenSock, (struct sockaddr *)&clientAddr, &nSize);
 
     printf("Accept connection");
     if (ClientSock == INVALID_SOCKET){
@@ -83,7 +86,7 @@ SOCKET proccesServer(SOCKET ClientSock){
     int res = recv(ClientSock, buffer, bufflen, 0);
     
     while (res > 0){
-        printf("--------------------------------\nBytes recieved: %d B\n", res);
+        printf("--------------------------------\nBytes recieved : %d B\n", res);
        
         MouseData * recvData = (MouseData*) buffer;       
         printf("X%d Y%d %s %s\n", recvData->x, recvData->y, 
@@ -147,10 +150,9 @@ SOCKET processClientSocket(const char * chaddr, short port){
                     (recvData->LKM != 0 ? "LKM":" "),
                     (recvData->RKM != 0 ? "RKM":" ")); 
             
-            send(sock, buff, strlen(buff), 0);
+            send(sock, buff, BUFFLEN, 0);
         
-            //printf("Send : %s", buff);
-
+            memset(buff, 0, BUFFLEN);
         }
     }
     

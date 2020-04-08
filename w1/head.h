@@ -2,7 +2,7 @@
 #define _MAIN_HEAD
 
 #define MAXCON 10
-#define BUFFLEN 1024
+#define BUFFLEN 64
 #define PORT 5002
 #define PAUSE 2000
 
