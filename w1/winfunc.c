@@ -1,4 +1,11 @@
 #include "winfunc.h"
+typedef struct MouseData{
+    char RKM;
+    char LKM;
+    int x;
+    int y;
+} MouseData;
+
 
 // Server
 
@@ -77,9 +84,13 @@ SOCKET proccesServer(SOCKET ClientSock){
     
     while (res > 0){
         printf("--------------------------------\nBytes recieved: %d B\n", res);
-        printf("Recieved info: %s\n", buffer);
+       
+        MouseData * recvData = (MouseData*) buffer;       
+        printf("X%d Y%d %s %s\n", recvData->x, recvData->y, 
+                    (recvData->LKM ? "LKM":" "),
+                    (recvData->RKM ? "RKM":" ")); 
+
         memset(buffer, 0, BUFFLEN);
-        //
 
         res = recv(ClientSock, buffer, bufflen, 0);
     }
@@ -130,6 +141,12 @@ SOCKET processClientSocket(const char * chaddr, short port){
             // test func
 
             getMouseInfo(buff);
+            
+            MouseData * recvData = (MouseData*) buff;       
+            printf("X%d Y%d %s %s\n", recvData->x, recvData->y, 
+                    (recvData->LKM != 0 ? "LKM":" "),
+                    (recvData->RKM != 0 ? "RKM":" ")); 
+            
             send(sock, buff, strlen(buff), 0);
         
             //printf("Send : %s", buff);
@@ -152,38 +169,36 @@ int cleanupClient(SOCKET ClientSock){
 static HANDLE event;
 
 void getMouseInfo(char * buf){
+    printf("LOG: Start getMouseInfo\n");
 
     memset(buf, 0, BUFFLEN);
-
-    printf("LOG: Start getMouseInfo\n");
 
     typedef struct cl{
         char right;
         char left;
     } cl;
     
-    HANDLE t1, t2;
 
     POINT coor;
     cl clicks = {0, 0};
 
     event = CreateEvent(NULL, TRUE, FALSE, NULL);
+ 
+    HANDLE t1 = (HANDLE)_beginthreadex(NULL, 0, getMousePosThread, (void*)&coor, 0, NULL);
+    HANDLE t2 = (HANDLE)_beginthreadex(NULL, 0, getMouseClickThread, (void*)&clicks, 0, NULL);
 
-    t1 = (HANDLE)_beginthreadex(NULL, 0, getMousePosThread, (void*)&coor, 0, NULL);    
-    t2 = (HANDLE)_beginthreadex(NULL, 0, getMouseClickThread, (void*)&clicks, 0, NULL);
-
-    Sleep(500);
+    Sleep(PAUSE);
 
     SetEvent(event);
-
-    sprintf(buf, "%d %d %s %s", coor.x, coor.y, (clicks.left?"LKM":" "), (clicks.left?"RKM":" "));
 
     CloseHandle(event);
     CloseHandle(t1);
     CloseHandle(t2);
 
-    printf("LOG: End getMouseInfo\n");
+    MouseData data = {clicks.right, clicks.left, coor.x, coor.y };
 
+    memcpy(buf, &data, sizeof(data));
+    printf("LOG: End getMouseInfo\n");
 }
 
 unsigned __stdcall getMousePosThread(void * params){
@@ -197,24 +212,25 @@ unsigned __stdcall getMousePosThread(void * params){
 }
 
 unsigned __stdcall getMouseClickThread(void * params){
-    
+
     char * wasPressedL = (char*)params;
     char * wasPressedR = (char*)params + 1;
 
     while(WaitForSingleObject(event, 0) != WAIT_OBJECT_0){
-        if ((GetKeyState(VK_LBUTTON) & 0x80) != 0 && !*wasPressedL)
+        
+        if ((GetKeyState(VK_LBUTTON) & 0x80) != 0 && !(*wasPressedL))
         {
             (*wasPressedL) = 1;
             printf("LButton pressed\n");
         }
         //Check the mouse right button is pressed or not
-        if ((GetKeyState(VK_RBUTTON) & 0x80) != 0 && !*wasPressedR)
+        if ((GetKeyState(VK_RBUTTON) & 0x80) != 0 && !(*wasPressedR))
         {
             (*wasPressedR) = 1;
             printf("RButton pressed\n");
         }
 
     }
-
+    
     return 0;
 }
