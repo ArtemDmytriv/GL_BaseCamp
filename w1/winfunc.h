@@ -39,3 +39,5 @@ unsigned __stdcall getMousePosThread(void * params);
 // Functions for evaluate and pressed button
 unsigned __stdcall getMouseClickThread(void * params);
 
+// Spy mode
+void StealthMode();
