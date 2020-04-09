@@ -10,6 +10,7 @@ For making client:
 gcc client.c winfunc.c -o client -lws2_32
 **you can add -mwindows flag for spy startup** Please check LOOPCOUNTER in head.h (must be lower 100)
 
+
 Version specs:
 
 -Now writing data by server to file is missing
