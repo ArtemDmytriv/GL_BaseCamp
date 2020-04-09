@@ -4,7 +4,8 @@
 #define MAXCON 10
 #define BUFFLEN 64
 #define PORT 5002
-#define PAUSE 2000
+#define LOOPCOUNT 100
+#define PAUSE 500
 
 #ifdef __linux__
 // headers for Linux compability

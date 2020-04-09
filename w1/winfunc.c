@@ -7,7 +7,7 @@ typedef struct MouseData{
 } MouseData;
 
 
-// Server
+// Server functions
 
 int WSAinit(){
     WSADATA wsaData;
@@ -25,7 +25,7 @@ SOCKET makeServerSocket(){
 
     SOCKET ListenSock = INVALID_SOCKET;
     
-    printf("Make socket\n");
+    printf("Make server socket\n");
     ListenSock = socket(AF_INET, SOCK_STREAM, IPPROTO_TCP);
     if (ListenSock == INVALID_SOCKET){
         printf("Making socket failed! progam aborting...\n");
@@ -113,6 +113,7 @@ int closeConnectionServer(SOCKET ClientSock){
 
         return 1;
     }  
+    closesocket(ClientSock);
 
     return 0;
 }
@@ -120,7 +121,6 @@ int closeConnectionServer(SOCKET ClientSock){
 int cleanupServer(SOCKET ClientSock){
 
     printf("Cleanup\n");
-    closesocket(ClientSock);
     WSACleanup();
     
     return 0;
@@ -140,9 +140,10 @@ SOCKET processClientSocket(const char * chaddr, short port){
     if (connect (sock, (SOCKADDR *)&addr, sizeof(addr)) != SOCKET_ERROR){
         char buff[BUFFLEN];
 
-        for (int i = 0; i < 10; ++i){
-            // test func
+        // So far, it has been loopen LOOPCOUNT times
+        for (int i = 0; i < LOOPCOUNT; ++i){
 
+            
             getMouseInfo(buff);
             
             MouseData * recvData = (MouseData*) buff;       
@@ -167,12 +168,11 @@ int cleanupClient(SOCKET ClientSock){
     return 0;
 }
 
-
 static HANDLE event;
 
-void getMouseInfo(char * buf){
-    printf("LOG: Start getMouseInfo\n");
+int getMouseInfo(char * buf){
 
+    //printf("LOG: Start getMouseInfo\n");
     memset(buf, 0, BUFFLEN);
 
     typedef struct cl{
@@ -186,11 +186,13 @@ void getMouseInfo(char * buf){
 
     event = CreateEvent(NULL, TRUE, FALSE, NULL);
  
+    // create two thread for simultaneously working 
     HANDLE t1 = (HANDLE)_beginthreadex(NULL, 0, getMousePosThread, (void*)&coor, 0, NULL);
     HANDLE t2 = (HANDLE)_beginthreadex(NULL, 0, getMouseClickThread, (void*)&clicks, 0, NULL);
 
+    // wait 500ms
     Sleep(PAUSE);
-
+    // event that must stop t2 thread
     SetEvent(event);
 
     CloseHandle(event);
@@ -198,9 +200,10 @@ void getMouseInfo(char * buf){
     CloseHandle(t2);
 
     MouseData data = {clicks.right, clicks.left, coor.x, coor.y };
-
+    // puck data to the buffer
     memcpy(buf, &data, sizeof(data));
-    printf("LOG: End getMouseInfo\n");
+    //printf("LOG: End getMouseInfo\n");
+    return sizeof(data);
 }
 
 unsigned __stdcall getMousePosThread(void * params){
@@ -213,13 +216,14 @@ unsigned __stdcall getMousePosThread(void * params){
     return 0;
 }
 
+// **inplementation may be changed
 unsigned __stdcall getMouseClickThread(void * params){
-
+    // get cl's structure left and right members
     char * wasPressedL = (char*)params;
     char * wasPressedR = (char*)params + 1;
 
     while(WaitForSingleObject(event, 0) != WAIT_OBJECT_0){
-        
+         //Check the mouse left button is pressed or not
         if ((GetKeyState(VK_LBUTTON) & 0x80) != 0 && !(*wasPressedL))
         {
             (*wasPressedL) = 1;
@@ -231,7 +235,6 @@ unsigned __stdcall getMouseClickThread(void * params){
             (*wasPressedR) = 1;
             printf("RButton pressed\n");
         }
-
     }
     
     return 0;
