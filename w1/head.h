@@ -15,6 +15,7 @@
 #include "linxnetw.h"
 #include "termios.h"
 #include "unistd.h"
+#include "X11/Xlib.h"
 #include "linxfunc.h"
 
 #elif _WIN32
