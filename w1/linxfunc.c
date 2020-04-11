@@ -114,7 +114,8 @@ socktype processClientSocket(const char * chaddr, short port){
     addr.sin_addr.s_addr = inet_addr(chaddr);
 
     if (connect(sock, (const struct sockaddr *)&addr, sizeof(addr))){
-        
+        printf("Connecting succesful\n");
+
         char buff[BUFFLEN];
 
         for (int i = 0; i < LOOPCOUNT; ++i){
