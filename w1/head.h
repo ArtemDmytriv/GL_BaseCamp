@@ -4,7 +4,7 @@
 #define MAXCON 10
 #define BUFFLEN 64
 #define PORT 5002
-#define LOOPCOUNT 100
+#define LOOPCOUNT 20
 #define PAUSE 500
 
 
@@ -14,6 +14,7 @@
 // headers for Linux compability
 #include "linxnetw.h"
 #include "linxfunc.h"
+#include "unistd.h"
 
 #elif _WIN32
 // headers for Windows compability
