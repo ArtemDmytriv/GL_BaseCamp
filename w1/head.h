@@ -13,7 +13,7 @@
 #ifdef __linux__
 // headers for Linux compability
 #include "linxnetw.h"
-
+#include "linxfunc.h"
 
 #elif _WIN32
 // headers for Windows compability

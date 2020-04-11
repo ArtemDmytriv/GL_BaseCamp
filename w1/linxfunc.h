@@ -8,8 +8,10 @@ struct MouseData;
 
 /* Server functions */
 
-// Initialize Winsock2 (also use for Client init)
+// not use
 int WSAinit();
+
+// make socket for server
 socktype makeServerSocket();
 
 // Bind server socket with server address
@@ -37,9 +39,10 @@ int getMouseInfo(char * buf);
 
 // Functions that runs in threads
 // Functions for evaluate position of cursor
-unsigned __stdcall getMousePosThread(void * params);
+//unsigned __stdcall getMousePosThread(void * params);
+
 // Functions for evaluate and pressed button
-unsigned __stdcall getMouseClickThread(void * params);
+//unsigned __stdcall getMouseClickThread(void * params);
 
 // Spy mode
 void StealthMode();
