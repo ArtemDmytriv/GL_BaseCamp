@@ -1,15 +1,16 @@
 #include "head.h"
 
+
 int main(int argc, char ** argv){
     
     // Init WinApi 
     WSAinit();
 
-    SOCKET servSock = makeServerSocket();
+    socktype servSock = makeServerSocket();
 
     servSock = bindServerSocket(servSock);
 
-    SOCKET clienSock = createConnectionServer(servSock);
+    socktype clienSock = createConnectionServer(servSock);
 
     clienSock = proccesServer(clienSock);
 

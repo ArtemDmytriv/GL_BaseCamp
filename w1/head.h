@@ -7,6 +7,9 @@
 #define LOOPCOUNT 100
 #define PAUSE 500
 
+
+
+
 #ifdef __linux__
 // headers for Linux compability
 #include "linxnetw.h"
@@ -26,5 +29,12 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+
+#ifdef __linux__
+typedef int socktype;  
+#elif _WIN32
+typedef SOCKET socktype
+#endif
+
 
 #endif
