@@ -108,28 +108,38 @@ socktype processClientSocket(const char * chaddr, short port){
 
     socktype sock = socket(AF_INET, SOCK_STREAM, IPPROTO_TCP);
     struct sockaddr_in addr;
+    struct hostent *server;
 
     addr.sin_family = AF_INET;
     addr.sin_port = htons(port);
-    addr.sin_addr.s_addr = inet_addr(chaddr);
 
-    if (connect(sock, (const struct sockaddr *)&addr, sizeof(addr))){
-        printf("Connecting succesful\n");
+    if(inet_pton(AF_INET, chaddr, &addr.sin_addr)<=0)  
+    { 
+        printf("\nInvalid address/ Address not supported \n"); 
+        exit(1); 
+    } 
+    printf("Address was converted succesfuly\n");
 
-        char buff[BUFFLEN];
 
-        for (int i = 0; i < LOOPCOUNT; ++i){
-            getMouseInfo(buff);
+    if (connect(sock, (const struct sockaddr *)&addr, sizeof(addr)) < 0){
+        printf("Connection failed\n");
+        exit(1);
+    }
+    printf("Connection complete\n");
 
-            MouseData * recvData = (MouseData*) buff;
-            printf("X%d Y%d %s %s\n", recvData->x, recvData->y, 
-                    (recvData->LKM != 0 ? "LKM":" "),
-                    (recvData->RKM != 0 ? "RKM":" ")); 
-            
-            write(sock, buff, BUFFLEN);
+    char buff[BUFFLEN];
+
+    for (int i = 0; i < LOOPCOUNT; ++i){
+        getMouseInfo(buff);
+
+        MouseData * recvData = (MouseData*) buff;
+        printf("X%d Y%d %s %s\n", recvData->x, recvData->y, 
+                (recvData->LKM != 0 ? "LKM":" "),
+                (recvData->RKM != 0 ? "RKM":" ")); 
         
-            memset(buff, 0, BUFFLEN);
-        }
+        send(sock, buff, BUFFLEN, 0);
+        
+        memset(buff, 0, BUFFLEN);
     }
 
     return sock;
@@ -143,11 +153,12 @@ int cleanupClient(socktype ClientSock){
 }
 
 int getMouseInfo(char * buff){
-
-    sleep(PAUSE);
+    printf(">In %s\n",__func__);
+    usleep(1000*PAUSE);
 
     MouseData data = {1, 0, 243, 213};
     memcpy(buff, &data, sizeof(data));
 
     return sizeof(data); 
+    printf("<In %s\n",__func__);
 }
