@@ -65,7 +65,7 @@ SOCKET createConnectionServer(SOCKET ListenSock){
 
     ClientSock = accept(ListenSock, (struct sockaddr *)&clientAddr, &nSize);
 
-    printf("Accept connection");
+    printf("Accept connection\n");
     if (ClientSock == INVALID_SOCKET){
         printf("Accept failed\n");
         closesocket(ListenSock);
@@ -90,9 +90,14 @@ SOCKET proccesServer(SOCKET ClientSock){
     time ( &rawtime );
     ptm = localtime ( &rawtime );
     char file_name[64] = {0}; 
-    sprintf(file_name, "DATA_%d:%d:&d.txt", ptm->tm_hour, ptm->tm_min, ptm->tm_sec);
+    sprintf(file_name, "DATA_%d:%d:%d.txt", ptm->tm_hour, ptm->tm_min, ptm->tm_sec);
     
+    printf(file_name);
+
     fout = fopen(file_name, "w");
+    if (fout == NULL){
+        printf("\nCannot create file\n");
+    }
 
     char output[256];
     int bufflen = BUFFLEN;
@@ -107,7 +112,9 @@ SOCKET proccesServer(SOCKET ClientSock){
                     (recvData->LKM ? "LKM":" "),
                     (recvData->RKM ? "RKM":" ")); 
         
+        // output in console
         puts(output);
+        // output in file
         fwrite(output, sizeof(char), res, fout);
 
         memset(buffer, 0, BUFFLEN);
