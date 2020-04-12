@@ -66,23 +66,49 @@ socktype createConnectionServer(socktype ListenSock){
 
 socktype proccesServer(socktype ClientSock){
     char buffer[BUFFLEN];
-    int bufflen = BUFFLEN;
+    
+    FILE* fout;
 
+    // make file for writing data
+    time_t rawtime;
+    struct tm * ptm;
+
+    time ( &rawtime );
+    ptm = localtime ( &rawtime );
+    char file_name[64] = {0}; 
+    sprintf(file_name, "DATA_%d:%d:%d.txt", ptm->tm_hour, ptm->tm_min, ptm->tm_sec);
+    
+    printf(file_name);
+
+    fout = fopen(file_name, "w");
+    if (fout == NULL){
+        printf("\nCannot create file\n");
+    }
+
+    char output[256];
+    int bufflen = BUFFLEN;
     int res = read(ClientSock, buffer, bufflen);
     
     while (res > 0){
         printf("--------------------------------\nBytes recieved : %d B\n", res);
        
         MouseData * recvData = (MouseData*) buffer;       
-        printf("X%d Y%d %s %s\n", recvData->x, recvData->y, 
+        sprintf(output, "X%d Y%d %s %s\n", recvData->x, recvData->y, 
                     (recvData->LKM ? "LKM":" "),
                     (recvData->RKM ? "RKM":" ")); 
+        
+        // output in console
+        puts(output);
+        // output in file
+        fwrite(output, sizeof(char), res, fout);
 
         memset(buffer, 0, BUFFLEN);
 
         res = read(ClientSock, buffer, bufflen);
     }
     
+    
+    fclose(fout);
     printf ("Connection clossed\n");
 
     return ClientSock;
