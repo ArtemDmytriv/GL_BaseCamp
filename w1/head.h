@@ -32,11 +32,12 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <time.h>
 
 #ifdef __linux__
 typedef int socktype;  
 #elif _WIN32
-typedef SOCKET socktype
+typedef SOCKET socktype;
 #endif
 
 
