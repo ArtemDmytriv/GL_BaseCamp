@@ -115,7 +115,7 @@ SOCKET proccesServer(SOCKET ClientSock){
         // output in console
         puts(output);
         // output in file
-        fwrite(output, sizeof(char), res, fout);
+        fwrite(output, sizeof(char), strlen(output), fout);
 
         memset(buffer, 0, BUFFLEN);
 
