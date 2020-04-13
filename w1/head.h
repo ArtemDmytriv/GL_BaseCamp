@@ -8,8 +8,6 @@
 #define PAUSE 500
 
 
-
-
 #ifdef __linux__
 // headers for Linux compability
 #include "linxnetw.h"

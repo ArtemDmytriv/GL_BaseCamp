@@ -77,8 +77,6 @@ socktype proccesServer(socktype ClientSock){
     ptm = localtime ( &rawtime );
     char file_name[64] = {0}; 
     sprintf(file_name, "DATA_%02d:%02d:%02d.txt", ptm->tm_hour, ptm->tm_min, ptm->tm_sec);
-    
-    printf(file_name);
 
     fout = fopen(file_name, "w");
     if (fout == NULL){
@@ -171,20 +169,21 @@ socktype processClientSocket(const char * chaddr, short port){
     return sock;
 }
 
-int cleanupClient(socktype ClientSock){
+void cleanupClient(socktype ClientSock){
     printf("Cleanup\n");
     shutdown(ClientSock, SHUT_RDWR);
 
-    return 0;
 }
 
+// I haven't done it yet (hard coded)
 int getMouseInfo(char * buff){
-    printf(">In %s\n",__func__);
+    //printf(">In %s\n",__func__);
     usleep(1000*PAUSE);
 
     MouseData data = {1, 0, 243, 213};
     memcpy(buff, &data, sizeof(data));
 
+
+    //printf("<In %s\n",__func__);
     return sizeof(data); 
-    printf("<In %s\n",__func__);
 }

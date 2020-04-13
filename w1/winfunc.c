@@ -14,10 +14,11 @@ int WSAinit(){
     printf("Initialising WinSock...\n");
     if (WSAStartup(WINSOCK_VERSION, &wsaData)){
         printf("WinSock init failed!\n ");
-        exit(1);
+        return 1;
     }
     else{
         printf("WinSock init succeed\n");
+        return 0;
     }
 }
 
@@ -91,8 +92,6 @@ SOCKET proccesServer(SOCKET ClientSock){
     ptm = localtime ( &rawtime );
     char file_name[64] = {0}; 
     sprintf(file_name, "DATA_%02d:%02d:%02d.txt", ptm->tm_hour, ptm->tm_min, ptm->tm_sec);
-    
-    printf(file_name);
 
     fout = fopen(file_name, "w");
     if (fout == NULL){
@@ -165,10 +164,9 @@ SOCKET processClientSocket(const char * chaddr, short port){
     if (connect (sock, (SOCKADDR *)&addr, sizeof(addr)) != SOCKET_ERROR){
         char buff[BUFFLEN];
 
-        // So far, it has been loopen LOOPCOUNT times
+        // it has been loop LOOPCOUNT times
         for (int i = 0; i < LOOPCOUNT; ++i){
 
-            
             getMouseInfo(buff);
             
             MouseData * recvData = (MouseData*) buff;       
@@ -185,12 +183,12 @@ SOCKET processClientSocket(const char * chaddr, short port){
     return sock;
 }
 
-int cleanupClient(SOCKET ClientSock){
+void cleanupClient(SOCKET ClientSock){
+    
     printf("Cleanup\n");
     closesocket(ClientSock);
     WSACleanup();
-    
-    return 0;
+
 }
 
 static HANDLE event;

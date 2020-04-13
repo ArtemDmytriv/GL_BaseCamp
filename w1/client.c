@@ -1,16 +1,18 @@
 #include "head.h"
 
+const char * LOCALHOST = "127.0.0.1"; // local adress
 
 int main(int argc, char ** argv){
+    
     //StealthMode(); spy mode
 
-    const char * chaddr = "127.0.0.1"; // use local adress
-
-    WSAinit();
+    if (WSAinit()){
+        exit(1);
+    }
     
     //ShowWindow(GetConsoleWindow(), SW_MINIMIZE);
 
-    socktype sock = processClientSocket(chaddr, PORT);
+    socktype sock = processClientSocket(LOCALHOST, PORT);
 
     cleanupClient(sock);
 

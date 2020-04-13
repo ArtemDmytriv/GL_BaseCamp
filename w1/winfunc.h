@@ -27,7 +27,7 @@ int cleanupServer(SOCKET ClientSock);
 // Main process loop for Client
 SOCKET processClientSocket(const char * addr, short port);
 // Close socket by client's side and deactivate Winsock2
-int cleanupClient(SOCKET ClientSock);
+void cleanupClient(SOCKET ClientSock);
 
 /* Main function for mouse (buf contains MouseData structure packed in buffer "char[]")
 return sizeof packed data in bytes*/

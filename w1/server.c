@@ -4,7 +4,9 @@
 int main(int argc, char ** argv){
     
     // Init WinApi 
-    WSAinit();
+    if (WSAinit()){
+        exit(1); // Failure
+    }
 
     socktype servSock = makeServerSocket();
 
@@ -14,7 +16,9 @@ int main(int argc, char ** argv){
 
     clienSock = proccesServer(clienSock);
 
-    closeConnectionServer(clienSock);
+    if (closeConnectionServer(clienSock)){
+        exit(2);
+    }
 
     cleanupServer(clienSock);
     
