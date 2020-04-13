@@ -1,12 +1,12 @@
 #ifndef _MAIN_HEAD
 #define _MAIN_HEAD
 
-#define MAXCON 10
-#define BUFFLEN 64
-#define PORT 5002
-#define LOOPCOUNT 20
-#define PAUSE 500
-
+#define MAXCON 10             
+#define BUFFLEN 64            /* Buffer size for client's reply */
+#define PORT 5002               
+#define LOOPCOUNT 100         /* How many replies will be from client */
+#define PAUSE 500             /* delay time between replies from client */
+#define LOCALHOST "127.0.0.1" /* Local address ip */
 
 #ifdef __linux__
 // headers for Linux compability
