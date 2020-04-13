@@ -1,6 +1,5 @@
 #include "head.h"
 
-const char * LOCALHOST = "127.0.0.1"; // local adress
 
 int main(int argc, char ** argv){
     
@@ -10,7 +9,9 @@ int main(int argc, char ** argv){
         exit(1);
     }
     
-    //ShowWindow(GetConsoleWindow(), SW_MINIMIZE);
+    #ifdef _WIN32 
+    ShowWindow(GetConsoleWindow(), SW_MINIMIZE);
+    #endif
 
     socktype sock = processClientSocket(LOCALHOST, PORT);
 
