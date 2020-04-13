@@ -3,16 +3,22 @@ Sorry for missing makefile, i have had difficulties for creating its with Cmake 
 
 At that moment, works in Windows with GCC compiler (Mingw or Cygwin)
 
-For making server:
+For making Windows server:
 gcc server.c winfunc.c -o server -lws2_32
 
-For making client:
+For making Linux server:
+gcc server.c winfunc.c -o server
+
+For making Windows client:
 gcc client.c winfunc.c -o client -lws2_32
 **you can add -mwindows flag for spy startup** Please check LOOPCOUNTER in head.h (must be lower 100)
 
 
 Version specs:
 
--Now writing data by server to file is missing
--Testing only in local areas
+-Add write data in file by server
+-Was testing with linux server and windows client, all is ok
+-Was testing with windows server and windows client, all is ok
+
+-Not implemented linux client ver., I will try use for this X11lib
 -Have some troubles when clicks in running client window (if clien window minimize/hide all is ok)
