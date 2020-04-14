@@ -6,13 +6,15 @@ At that moment, works in Windows with GCC compiler (Mingw or Cygwin)
 For making Windows server:
 gcc server.c winfunc.c -o server -lws2_32
 
-For making Linux server:
-gcc server.c winfunc.c -o server
-
 For making Windows client:
 gcc client.c winfunc.c -o client -lws2_32
 **you can add -mwindows flag for spy startup** Please check LOOPCOUNTER in head.h (must be lower 100)
 
+For making Linux server:
+make server
+
+For making Linux client:
+make client
 
 Version specs:
 
