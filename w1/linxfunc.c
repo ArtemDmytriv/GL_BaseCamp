@@ -123,7 +123,7 @@ int closeConnectionServer(socktype ClientSock){
     return 0;
 }
 
-inline int cleanupServer(socktype ClientSock){
+int cleanupServer(socktype ClientSock){
     return 0;
 }
 
@@ -169,20 +169,31 @@ socktype processClientSocket(const char * chaddr, short port){
     return sock;
 }
 
-void cleanupClient(socktype ClientSock){
+int cleanupClient(socktype ClientSock){
     printf("Cleanup\n");
     shutdown(ClientSock, SHUT_RDWR);
-
+    return 0;
 }
 
 // I haven't done it yet (hard coded)
 int getMouseInfo(char * buff){
     //printf(">In %s\n",__func__);
-    usleep(1000*PAUSE);
+   
+    Display *dpy;
+    int xi_opcode, event, error;
+    XEvent ev;
 
+    dpy = XOpenDisplay(NULL);
+    if (!dpy) {
+        printf("Failed to open display.\n");
+        return 1;
+    }
+
+     
     MouseData data = {1, 0, 243, 213};
     memcpy(buff, &data, sizeof(data));
 
+    usleep(1000*PAUSE);
 
     //printf("<In %s\n",__func__);
     return sizeof(data); 

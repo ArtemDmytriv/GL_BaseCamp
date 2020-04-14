@@ -23,7 +23,7 @@ socktype proccesServer(socktype ClientSock);
 
 int closeConnectionServer(socktype ClientSock);
 // Close Winsock2
-void cleanupServer(socktype ClientSock);
+int cleanupServer(socktype ClientSock);
 
 
 /* Client functions */
