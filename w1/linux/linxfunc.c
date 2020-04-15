@@ -190,6 +190,7 @@ int getMouseInfo(char * buff){
 
     usleep(1000*PAUSE);
 
+    endwin();
     //printf("<In %s\n",__func__);
     return sizeof(data); 
 }

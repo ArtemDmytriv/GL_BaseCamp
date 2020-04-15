@@ -1,5 +1,7 @@
-server: server.c linxfunc.c
-	gcc server.c linxfunc.c -o server -lncurses
+all: server client
 
-client: client.c linxfunc.c
-	gcc client.c linxfunc.c -o client -lncurses
+server: server.c linux/linxfunc.c
+	gcc server.c linux/linxfunc.c -o server -lncurses
+
+client: client.c linux/linxfunc.c
+	gcc client.c linux/linxfunc.c -o client -lncurses

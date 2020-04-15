@@ -1,4 +1,4 @@
-#include "head.h"
+#include "../head.h"
 
 typedef int socktype;
 /* Header include windows inmplemntation */

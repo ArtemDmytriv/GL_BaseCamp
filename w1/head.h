@@ -10,16 +10,16 @@
 
 #ifdef __linux__
 // headers for Linux compability
-#include "linxnetw.h"
+#include "linux/linxnetw.h"
 #include "unistd.h"
 #include "ncurses.h"
-#include "linxfunc.h"
+#include "linux/linxfunc.h"
 
 #elif _WIN32
 // headers for Windows compability
-#include "winnetw.h"
+#include "win/winnetw.h"
 #include "process.h"
-#include "winfunc.h"
+#include "win/winfunc.h"
 
 #else
 #error "Run on not supported OS"
