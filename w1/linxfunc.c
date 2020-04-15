@@ -179,18 +179,13 @@ int cleanupClient(socktype ClientSock){
 int getMouseInfo(char * buff){
     //printf(">In %s\n",__func__);
    
-    Display *dpy;
-    int xi_opcode, event, error;
-    XEvent ev;
+    initscr();
 
-    dpy = XOpenDisplay(NULL);
-    if (!dpy) {
-        printf("Failed to open display.\n");
-        return 1;
-    }
+    int x, y;
 
-     
-    MouseData data = {1, 0, 243, 213};
+    getyx(curscr, y, x);
+    
+    MouseData data = {0, 0, x, y};
     memcpy(buff, &data, sizeof(data));
 
     usleep(1000*PAUSE);
