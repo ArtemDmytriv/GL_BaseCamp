@@ -206,20 +206,14 @@ int getMouseInfo(char * buff){
         root_windows[i] = XRootWindow(display, i);
     }
  
-    for (;;) {
-        for (i = 0; i < number_of_screens; i++) {
-            result = XQueryPointer(display, root_windows[i], &window_returned,
+    
+    for (i = 0; i < number_of_screens; i++) {
+        result = XQueryPointer(display, root_windows[i], &window_returned,
                     &window_returned, &root_x, &root_y, &win_x, &win_y,
                     &mask_return);
-            if (result == 1) {
-                break;
-            }
+        if (result == 1) {
+            break;
         }
-        if (result != 1) {
-            printf("No mouse found.\n");
-            return -1;
-        }
-
     }
  
     free(root_windows);
