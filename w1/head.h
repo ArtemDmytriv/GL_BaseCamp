@@ -12,7 +12,7 @@
 // headers for Linux compability
 #include "linux/linxnetw.h"
 #include "unistd.h"
-#include "ncurses.h"
+//#include <X11/Xlib.h>
 #include "linux/linxfunc.h"
 
 #elif _WIN32

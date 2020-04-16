@@ -178,19 +178,14 @@ int cleanupClient(socktype ClientSock){
 // I haven't done it yet (hard coded)
 int getMouseInfo(char * buff){
     //printf(">In %s\n",__func__);
-   
-    initscr();
+    int x = 0, y = 0;
 
-    int x, y;
-
-    getyx(curscr, y, x);
-    
     MouseData data = {0, 0, x, y};
     memcpy(buff, &data, sizeof(data));
 
     usleep(1000*PAUSE);
 
-    endwin();
+    
     //printf("<In %s\n",__func__);
     return sizeof(data); 
 }
