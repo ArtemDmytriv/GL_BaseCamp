@@ -1,7 +1,25 @@
+CC=gcc
+
+ifeq ($(OS), Windows_NT)
+	LIBS=-lws2_32
+	INCL=win/winfunc.c
+else
+	LIBS=-lncurses
+	INCL=linux/linxfunc.c
+endif
+
+.PHONY: all test
+
 all: server client
 
-server: server.c linux/linxfunc.c
-	gcc server.c linux/linxfunc.c -o server -lncurses
+server: server.c $(INCL)
+		$(CC) server.c $(INCL) -o server $(LIBS)
 
-client: client.c linux/linxfunc.c
-	gcc client.c linux/linxfunc.c -o client -lncurses
+client: client.c $(INCL)
+		$(CC) client.c $(INCL) -o client $(LIBS)
+
+test:
+	(info ****TEST****)
+
+
+
