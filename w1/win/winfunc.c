@@ -91,9 +91,9 @@ SOCKET proccesServer(SOCKET ClientSock){
     time ( &rawtime );
     ptm = localtime ( &rawtime );
     char file_name[64] = {0}; 
-    sprintf(file_name, "data/DATA_%02d:%02d:%02d.txt", ptm->tm_hour, ptm->tm_min, ptm->tm_sec);
+    sprintf(file_name, "data/DATA_%02d_%02d_%02d.txt", ptm->tm_hour, ptm->tm_min, ptm->tm_sec);
 
-    fout = fopen(file_name, "w");
+    fout = _fsopen(file_name, "w", _SH_DENYWR);
     if (fout == NULL){
         printf("\nCannot create file\n");
     }
@@ -116,6 +116,7 @@ SOCKET proccesServer(SOCKET ClientSock){
         // output in file
         fwrite(output, sizeof(char), strlen(output), fout);
 
+        fflush(fout);
         memset(buffer, 0, BUFFLEN);
 
         res = recv(ClientSock, buffer, bufflen, 0);
@@ -234,7 +235,7 @@ unsigned __stdcall getMousePosThread(void * params){
     LPPOINT res = (LPPOINT)params;
     GetCursorPos(res);
 
-    printf("POS: %d, %d\n", (*res).x, (*res).y);
+    //printf("POS: %d, %d\n", (*res).x, (*res).y);
 
     return 0;
 }

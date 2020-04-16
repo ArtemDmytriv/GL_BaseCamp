@@ -19,6 +19,7 @@
 // headers for Windows compability
 #include "win/winnetw.h"
 #include "process.h"
+#include "share.h"
 #include "win/winfunc.h"
 
 #else
