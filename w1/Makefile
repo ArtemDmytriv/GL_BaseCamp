@@ -4,7 +4,7 @@ ifeq ($(OS), Windows_NT)
 	LIBS=-lws2_32
 	INCL=win/winfunc.c
 else
-	LIBS=-lncurses
+	LIBS=-lX11
 	INCL=linux/linxfunc.c
 endif
 

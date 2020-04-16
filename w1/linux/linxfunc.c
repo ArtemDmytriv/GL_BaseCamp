@@ -176,17 +176,62 @@ int cleanupClient(socktype ClientSock){
     return 0;
 }
 
+
+static int _XlibErrorHandler(Display *display, XErrorEvent *event) {
+    fprintf(stderr, "An error occured detecting the mouse position\n");
+    return True;
+}
+
 // I haven't done it yet (hard coded)
 int getMouseInfo(char * buff){
     //printf(">In %s\n",__func__);
-    int x = 0, y = 0;
 
-    MouseData data = {0, 0, x, y};
+    int number_of_screens;
+    int i;
+    Bool result;
+    Window *root_windows;
+    Window window_returned;
+    int root_x, root_y;
+    int win_x, win_y;
+    unsigned int mask_return;
+
+    Display *display = XOpenDisplay(NULL);
+
+    XSetErrorHandler(_XlibErrorHandler);
+    number_of_screens = XScreenCount(display);
+    printf("There are %d screens available in this X session\n", number_of_screens);
+    
+    root_windows = malloc(sizeof(Window) * number_of_screens);
+    for (i = 0; i < number_of_screens; i++) {
+        root_windows[i] = XRootWindow(display, i);
+    }
+ 
+    for (;;) {
+        for (i = 0; i < number_of_screens; i++) {
+            result = XQueryPointer(display, root_windows[i], &window_returned,
+                    &window_returned, &root_x, &root_y, &win_x, &win_y,
+                    &mask_return);
+            if (result == 1) {
+                break;
+            }
+        }
+        if (result != 1) {
+            printf("No mouse found.\n");
+            return -1;
+        }
+
+    }
+ 
+    free(root_windows);
+
+    /////////////////////////////// 
+    
+    MouseData data = {0, 0, root_x, root_y};
     memcpy(buff, &data, sizeof(data));
 
     usleep(1000*PAUSE);
-
-    
     //printf("<In %s\n",__func__);
     return sizeof(data); 
 }
+
+ 
