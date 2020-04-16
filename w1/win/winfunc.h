@@ -1,4 +1,4 @@
-#include "head.h"
+#include "../head.h"
 /* Header include windows inmplemntation */
 
 // declaration mouse struct
