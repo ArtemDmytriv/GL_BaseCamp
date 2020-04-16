@@ -13,10 +13,10 @@ endif
 all: server client
 
 server: server.c $(INCL)
-		$(CC) server.c $(INCL) -o server $(LIBS)
+		$(CC) server.c $(INCL) -g -o server $(LIBS)
 
 client: client.c $(INCL)
-		$(CC) client.c $(INCL) -o client $(LIBS)
+		$(CC) client.c $(INCL) -g -o client $(LIBS)
 
 test:
 	(info ****TEST****)
