@@ -25,6 +25,7 @@ ifeq ($(OS), Windows_NT)
 		.\client
 else
 		$(LINTERM) -e "./server"
+		sleep 1
 		./client
 endif 
 
