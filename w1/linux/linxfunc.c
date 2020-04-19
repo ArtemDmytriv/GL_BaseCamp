@@ -182,7 +182,6 @@ static int _XlibErrorHandler(Display *display, XErrorEvent *event) {
     return True;
 }
 
-// I haven't done it yet (hard coded)
 int getMouseInfo(char * buff){
     //printf(">In %s\n",__func__);
 
@@ -199,8 +198,7 @@ int getMouseInfo(char * buff){
 
     XSetErrorHandler(_XlibErrorHandler);
     number_of_screens = XScreenCount(display);
-    printf("There are %d screens available in this X session\n", number_of_screens);
-    
+  
     root_windows = malloc(sizeof(Window) * number_of_screens);
     for (i = 0; i < number_of_screens; i++) {
         root_windows[i] = XRootWindow(display, i);
@@ -218,8 +216,6 @@ int getMouseInfo(char * buff){
  
     free(root_windows);
 
-    /////////////////////////////// 
-    
     MouseData data = {0, 0, root_x, root_y};
     memcpy(buff, &data, sizeof(data));
 

@@ -8,7 +8,7 @@ else
 	INCL=linux/linxfunc.c
 endif
 
-.PHONY: all test
+.PHONY: all test clean
 
 all: server client
 
@@ -21,5 +21,7 @@ client: client.c $(INCL)
 test:
 	(info ****TEST****)
 
+clean:
+	rm client server
 
 
