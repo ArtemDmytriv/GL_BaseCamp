@@ -1,9 +1,17 @@
 Compile options:
+Check top defines in file head.h
 At that moment, works in Windows with GCC compiler (Mingw or Cygwin)
 For working in Linux, you must install x11lib (sudo apt install libx11-dev)
 
 For cross-platform making use command:
 make
+
+For cross-platform cleaning use command:
+make clean
+
+For cross-platform testing (start server in new prompt and start client) use command:
+make test
+
 
 Version specs:
 

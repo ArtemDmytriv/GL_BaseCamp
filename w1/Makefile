@@ -19,9 +19,18 @@ client: client.c $(INCL)
 		$(CC) client.c $(INCL) -g -o client $(LIBS)
 
 test:
-	(info ****TEST****)
+ifeq ($(OS), Windows_NT)
+		cmd /c start cmd /k .\server.exe
+		.\client
+else
+		term
+endif 
 
 clean:
-	rm client server
+ifeq ($(OS), Windows_NT)
+		del client.exe server.exe
+else
+		rm client server
+endif 
 
 

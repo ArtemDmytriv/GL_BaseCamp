@@ -76,7 +76,7 @@ socktype proccesServer(socktype ClientSock){
     time ( &rawtime );
     ptm = localtime ( &rawtime );
     char file_name[64] = {0}; 
-    sprintf(file_name, "data/DATA_%02d_%02d_%02d.txt", ptm->tm_hour, ptm->tm_min, ptm->tm_sec);
+    sprintf(file_name, "data/DATA(%02d_%02d)%02d_%02d_%02d.txt", ptm->tm_mday, ptm->tm_mon, ptm->tm_hour, ptm->tm_min, ptm->tm_sec);
 
     fout = fopen(file_name, "w");
     if (fout == NULL){
