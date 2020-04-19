@@ -1,4 +1,5 @@
 CC=gcc
+LINTERM=gnome-terminal
 
 ifeq ($(OS), Windows_NT)
 	LIBS=-lws2_32
@@ -23,7 +24,8 @@ ifeq ($(OS), Windows_NT)
 		cmd /c start cmd /k .\server.exe
 		.\client
 else
-		term
+		$(LINTERM) -e "./server"
+		./client
 endif 
 
 clean:

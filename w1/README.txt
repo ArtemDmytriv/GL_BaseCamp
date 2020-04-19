@@ -1,7 +1,7 @@
 Compile options:
-Check top defines in file head.h
-At that moment, works in Windows with GCC compiler (Mingw or Cygwin)
-For working in Linux, you must install x11lib (sudo apt install libx11-dev)
+Check top defines in file head.h (LOOPCOUNT for count of client request)
+Works in Windows with GCC compiler (Mingw or Cygwin)
+For working in Linux, you must install x11lib (sudo apt install libx11-dev) in "make test used gnome-terminal (can change in makefile)"
 
 For cross-platform making use command:
 make
