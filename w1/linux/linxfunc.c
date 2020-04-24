@@ -243,8 +243,39 @@ void* getMousePosThread(void * params){
 }
 
 void* getMouseClickThread(void * params){
-    int i = 0;
-    while (1){
-        ++i;
+    
+    MouseData * md = (MouseData*)params;
+    int fd, bytes;
+    unsigned char data[3];
+
+    const char *pDevice = "/dev/input/mice";
+
+    // Open Mouse
+    fd = open(pDevice, O_RDWR);
+    if(fd == -1)
+    {
+        printf("ERROR Opening %s\n", pDevice);
+        return -1;
     }
+
+    int left, middle, right;
+    
+    while(flag)
+    {
+        // Read Mouse     
+        bytes = read(fd, data, sizeof(data));
+
+        if(bytes > 0)
+        {
+            if (data[0] & 0x1){
+                md->LKM = 1;
+            }
+            if (data[0] & 0x2){
+                md->RKM = 1;
+            }   
+
+            printf("left=%d, middle=%d, right=%d\n", left, middle, right);
+        }   
+    }
+
 }
