@@ -186,12 +186,15 @@ static volatile int flag;
 
 int getMouseInfo(char * buff){
 
-    pthread_t t1;
+    pthread_t t1, t2;
+
     MouseData data = {0,0,0,0};
 
     pthread_create(&t1, NULL, getMousePosThread, &data);
+    pthread_create(&t2, NULL, getMouseClickThread, &data);
 
     pthread_join(t1, NULL);
+    pthread_join(t2, NULL);
 
     memcpy(buff, &data, sizeof(data));
 
