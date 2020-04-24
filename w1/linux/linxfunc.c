@@ -7,6 +7,8 @@ typedef struct MouseData{
     int y;
 } MouseData;
 
+const char *pDevice = "/dev/input/mice";
+
 // Server functions
 
 inline int WSAinit(){

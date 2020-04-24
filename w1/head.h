@@ -17,8 +17,6 @@
 #include <fcntl.h>
 #include "linux/linxfunc.h"
 
-const char *pDevice = "/dev/input/mice";
-
 #elif _WIN32
 // headers for Windows compability
 #include "win/winnetw.h"
