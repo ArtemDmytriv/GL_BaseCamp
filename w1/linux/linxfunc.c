@@ -182,11 +182,26 @@ static int _XlibErrorHandler(Display *display, XErrorEvent *event) {
     return True;
 }
 
-int getMouseInfo(char * buff){
-    //printf(">In %s\n",__func__);
+static volatile int flag;
 
-    int number_of_screens;
-    int i;
+int getMouseInfo(char * buff){
+
+    pthread_t t1;
+    MouseData data = {0,0,0,0};
+
+    pthread_create(&t1, NULL, getMousePosThread, &data);
+
+    pthread_join(t1, NULL);
+
+    memcpy(buff, &data, sizeof(data));
+
+    return sizeof(data);
+}
+
+void* getMousePosThread(void * params){
+    //printf(">In %s\n",__func__);
+    
+    int number_of_screens, i;
     Bool result;
     Window *root_windows;
     Window window_returned;
@@ -216,12 +231,20 @@ int getMouseInfo(char * buff){
  
     free(root_windows);
 
-    MouseData data = {0, 0, root_x, root_y};
-    memcpy(buff, &data, sizeof(data));
+    MouseData * md = (MouseData*)params;
+    md->x = root_x;
+    md->y = root_y;
+    //memcpy(buff, &data, sizeof(data));
 
     usleep(1000*PAUSE);
+    flag = 0;
+
     //printf("<In %s\n",__func__);
-    return sizeof(data); 
 }
 
- 
+void* getMouseClickThread(void * params){
+    int i = 0;
+    while (1){
+        ++i;
+    }
+}

@@ -6,6 +6,7 @@ ifeq ($(OS), Windows_NT)
 	INCL=win/winfunc.c
 else
 	LIBS=-lX11
+	LIBS+=-lpthread
 	INCL=linux/linxfunc.c
 endif
 

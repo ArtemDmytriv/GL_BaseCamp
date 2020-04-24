@@ -13,6 +13,7 @@
 #include "linux/linxnetw.h"
 #include "unistd.h"
 #include <X11/Xlib.h>
+#include <pthread.h>
 #include "linux/linxfunc.h"
 
 #elif _WIN32
