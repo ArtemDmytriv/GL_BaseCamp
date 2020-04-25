@@ -33,16 +33,16 @@ socktype processClientSocket(const char * addr, short port);
 // Close socket by client's side and deactivate Winsock2
 int cleanupClient(socktype ClientSock);
 
+
 /* Main function for mouse (buf contains MouseData structure packed in buffer "char[]")
 return sizeof packed data in bytes*/
 int getMouseInfo(char * buf);
 
-// Functions that runs in threads
-// Functions for evaluate position of cursor
-//unsigned __stdcall getMousePosThread(void * params);
+// Functions for evaluate button position
+void* getMousePosThread(void * params);
 
 // Functions for evaluate and pressed button
-//unsigned __stdcall getMouseClickThread(void * params);
+void* getMouseClickThread(void * params);
 
 // Spy mode
 void StealthMode();

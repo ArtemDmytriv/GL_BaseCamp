@@ -7,6 +7,8 @@ typedef struct MouseData{
     int y;
 } MouseData;
 
+const char *pDevice = "/dev/input/mice";
+
 // Server functions
 
 inline int WSAinit(){
@@ -183,10 +185,29 @@ static int _XlibErrorHandler(Display *display, XErrorEvent *event) {
 }
 
 int getMouseInfo(char * buff){
-    //printf(">In %s\n",__func__);
 
-    int number_of_screens;
-    int i;
+    pthread_t t1, t2;
+
+    MouseData data = {0,0,0,0};
+
+    pthread_create(&t2, NULL, getMouseClickThread, &data);
+    pthread_create(&t1, NULL, getMousePosThread, &data);
+    
+
+    pthread_join(t1, NULL);
+    pthread_cancel(t2);
+
+    pthread_join(t2, NULL);
+
+    memcpy(buff, &data, sizeof(data));
+
+    return sizeof(data);
+}
+
+void* getMousePosThread(void * params){
+    //printf(">In %s\n",__func__);
+    
+    int number_of_screens, i;
     Bool result;
     Window *root_windows;
     Window window_returned;
@@ -216,12 +237,44 @@ int getMouseInfo(char * buff){
  
     free(root_windows);
 
-    MouseData data = {0, 0, root_x, root_y};
-    memcpy(buff, &data, sizeof(data));
+    MouseData * md = (MouseData*)params;
+    md->x = root_x;
+    md->y = root_y;
 
     usleep(1000*PAUSE);
+
     //printf("<In %s\n",__func__);
-    return sizeof(data); 
 }
 
- 
+void* getMouseClickThread(void * params){
+    
+    MouseData * md = (MouseData*)params;
+    int fd, bytes;
+    unsigned char data[3];
+
+    // Open Mouse
+    fd = open(pDevice, O_RDWR);
+    if(fd == -1)
+    {
+        printf("ERROR Opening %s\n", pDevice);
+    }
+
+    int left, right;
+    
+    while(1)
+    {
+        // Read Mouse     
+        bytes = read(fd, data, sizeof(data));
+
+        if(bytes > 0)
+        {
+            if (data[0] & 0x1){
+                md->LKM = 1;
+            }
+            if (data[0] & 0x2){
+                md->RKM = 1;
+            }   
+        }   
+    }
+
+}
