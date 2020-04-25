@@ -27,7 +27,7 @@ ifeq ($(OS), Windows_NT)
 else
 		$(LINTERM) -e "./server"
 		sleep 1
-		./client
+		sudo ./client
 endif 
 
 clean:

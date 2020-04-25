@@ -9,9 +9,10 @@ make
 For cross-platform cleaning use command:
 make clean
 
-For cross-platform testing (start server in new prompt and start client) use command:
+For cross-platform testing (start server in new prompt  (gnome-terminal) and start client) use command:
 make test
 
+!!!Linux client needs sudo access!!! 
 
 Version specs:
 
@@ -21,5 +22,4 @@ Version specs:
 +Was testing with windows server and windows client, all is ok
 
 +Linux ver. used x11lib for getting current mouse position
--Not implemented mouse clicks
--Have some troubles when clicks in running client window (if clien window minimize/hide all is ok)
++Implemented mouse clicks in Linux cleint

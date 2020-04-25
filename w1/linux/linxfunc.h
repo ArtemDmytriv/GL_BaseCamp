@@ -41,7 +41,7 @@ int getMouseInfo(char * buf);
 // Functions for evaluate button position
 void* getMousePosThread(void * params);
 
-// Functions for evaluate and pressed button
+// Functions for evaluate pressed button
 void* getMouseClickThread(void * params);
 
 // Spy mode
